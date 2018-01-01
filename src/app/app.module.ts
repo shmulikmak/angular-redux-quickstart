@@ -1,7 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
+// Redux
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { rootReducer, IAppState, INITIAL_STATE } from './store';
+import { CounterActions } from './app.actions';
 
+// components
 import { AppComponent } from './app.component';
 
 
@@ -10,9 +17,18 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    NgReduxModule
   ],
-  providers: [],
+  providers: [CounterActions],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+    constructor(ngRedux: NgRedux<IAppState>) {
+      ngRedux.configureStore(
+        rootReducer,
+        INITIAL_STATE);
+    }
+}
